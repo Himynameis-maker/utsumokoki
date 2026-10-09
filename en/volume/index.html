@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Convert Video to Audio &amp; Adjust Volume Online – No Upload</title>
+<meta name="description" content="Raise or lower the volume of MP4, MP3, WAV and M4A files, and extract audio from video to save as MP3 or WAV. Nothing is uploaded: everything runs in your browser. Trim the start and end with a waveform. Free.">
+<link rel="canonical" href="https://volchange-local.com/en/volume/">
+<link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/">
+<link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/">
+<link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/">
+<link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Audio Tools">
+<meta property="og:title" content="Convert Video to Audio &amp; Adjust Volume Online – No Upload">
+<meta property="og:description" content="Raise or lower the volume of MP4, MP3, WAV and M4A files, and extract audio from video to save as MP3 or WAV. Nothing is uploaded: everything runs in your browser. Trim the start and end with a waveform. Free.">
+<meta property="og:url" content="https://volchange-local.com/en/volume/">
+<meta property="og:locale" content="en_US">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/assets/common.css?v=20261009">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610225668788576"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+<main>
+  <header class="site-head">
+    <div class="top"><a class="brand" href="/en/">Audio Tools</a><nav class="langs" aria-label="Language"><a href="/ja/volume/" hreflang="ja" lang="ja">日本語</a><span aria-current="true" lang="en">English</span><a href="/zh/volume/" hreflang="zh-CN" lang="zh-CN">中文（简体）</a></nav></div>
+    <nav class="tabs" aria-label="Tools"><a href="/en/">Home</a><a href="/en/volume/" aria-current="page">Volume</a></nav>
+  </header>
+  <h1 data-i18n="title">Volume Adjuster</h1>
+  <p class="lead" data-i18n="lead">Load an MP3, WAV, M4A, or MP4 file up to 35 minutes long (only the audio is used from video), adjust its volume, and trim the start and end while viewing the waveform. Save as MP3 or WAV. Your file is processed only in this browser and is never uploaded. If you hear no sound, try turning off silent mode.</p>
+
+  <label class="drop" id="drop" for="file">
+    <input type="file" id="file" accept=".mp3,.wav,.m4a,.mp4,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a,video/mp4">
+    <strong id="dropTitle">Choose an audio file</strong>
+    <span data-i18n="dropSub">Tap to choose, or drag and drop here (up to 35 min)</span>
+  </label>
+  <p class="err" id="err" role="alert" hidden></p>
+
+  <div id="app" hidden>
+    <section class="panel" style="margin-top:14px">
+      <div class="fname" id="fname"></div>
+      <div class="meta" id="fmeta"></div>
+    </section>
+
+    <section class="panel">
+      <canvas id="wave" data-i18n-aria="waveAria"></canvas>
+      <div class="time"><span id="tStart">0:00.0</span><span id="tMid">0:00.0 / 0:00.0</span><span id="tEnd">0:00.0</span></div>
+      <p class="meta" style="margin:6px 0 12px" data-i18n="hint">Drag the two handles on the waveform to choose the part to keep. Tap the waveform or drag the white playhead bar to move it.</p>
+      <div class="player">
+        <button class="btn" id="play">Play</button>
+        <button class="btn ghost" id="reset" data-i18n="reset">Reset range</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="vol-row">
+        <div class="vol-num"><span id="volNum">100</span><small>%</small></div>
+        <div class="meta" id="dbNum">0.0 dB</div>
+      </div>
+      <input type="range" id="vol" min="0" max="398" step="1" value="100" data-i18n-aria="volAria">
+      <div class="ticks"><span style="left:0">0%</span><span style="left:25.13%">100%</span><span style="left:50.25%">200%</span><span style="left:75.38%">300%</span><span style="left:100%">+12 dB</span></div>
+      <div class="presets">
+        <button class="chip" data-v="50">50%</button>
+        <button class="chip" data-v="100">100%</button>
+        <button class="chip" data-v="200">200%</button>
+        <button class="chip" data-v="300">300%</button>
+        <button class="chip" data-v="398">+12 dB</button>
+      </div>
+      <p class="warn" id="warn"></p>
+    </section>
+
+    <section class="panel">
+      <div class="opts">
+        <label><span data-i18n="fmtLabel">Save as</span>
+          <select id="fmt"><option value="mp3">MP3</option><option value="wav" data-i18n="optWav">WAV (lossless)</option></select>
+        </label>
+        <label id="brWrap"><span data-i18n="brLabel">MP3 bitrate (kbps)</span>
+          <select id="br"><option>128</option><option selected>192</option><option>256</option><option>320</option></select>
+        </label>
+      </div>
+      <button class="btn" id="dl" data-i18n="dl">Apply volume and save</button>
+      <progress id="prog" max="100" value="0" hidden></progress>
+      <p class="status" id="status" role="status"></p>
+      <div class="share" id="shareBox" hidden><span data-i18n="shareHint">Couldn't save? Use this</span><button type="button" class="share-btn" id="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span data-i18n="share">Share</span></button></div>
+    </section>
+  </div>
+
+  <p class="note" data-i18n="note">Nothing is uploaded to a server. Only process audio you have the right to use.</p>
+  <section class="panel guide" id="guide">
+    <h2>About this tool</h2>
+    <p>Volume Adjuster is a free tool that raises or lowers the volume of MP3, WAV, M4A and MP4 files right in your browser. You can also pull the audio out of a video (MP4) and save it, and trim unwanted parts from the start and end while looking at the waveform. Your file is never sent to a server: everything is processed on your own computer or phone.</p>
+
+    <h3>How to use it</h3>
+    <ol>
+      <li>Tap “Choose an audio file” (or drag and drop a file onto it) and load an MP3, WAV, M4A or MP4 file up to 35 minutes long.</li>
+      <li>Drag the two handles on the waveform to choose the part you want to keep. Leave them at the ends to keep everything. Press play to check the result.</li>
+      <li>Set the volume with the slider or with the 50%, 100%, 200%, 300% and +12 dB buttons. You can move it during playback to hear the difference.</li>
+      <li>Choose MP3 or WAV. For MP3 you can also pick a bitrate.</li>
+      <li>Press “Apply volume and save”. The converted file downloads to your device, named like “original-name_vol150.mp3” with the volume percentage you chose.</li>
+    </ol>
+
+    <h3>Main features</h3>
+    <ul>
+      <li>Adjust the volume from 0% (mute) to 398% (+12 dB). 100% is the original volume.</li>
+      <li>Extract only the audio from an MP4 video and save it as MP3 or WAV.</li>
+      <li>Trim the start and end while viewing the waveform.</li>
+      <li>Save as MP3 (128, 192, 256 or 320 kbps) or WAV (uncompressed).</li>
+      <li>Everything runs in your browser. No sign-up and no app to install.</li>
+    </ul>
+
+    <h3>Choosing a volume</h3>
+    <p>The volume is shown both as a percentage and in decibels (dB). 50% is about −6 dB, 200% is about +6 dB, 300% is about +9.5 dB and 398% is +12 dB. Quietly recorded audio often becomes easy to hear at 200–300%. However, if the original is already loud and you raise it too much, the peaks of the waveform are cut off at the limit and the sound distorts (clipping). A notice appears when parts of the audio may clip, so start with a smaller value and listen to the result.</p>
+
+    <h3>Frequently asked questions</h3>
+    <h4>Does the video image stay in the saved file?</h4>
+    <p>No. Only the audio is extracted from the MP4 and saved as an MP3 or WAV audio file. Editing or exporting video is not supported, and a video without an audio track cannot be loaded.</p>
+    <h4>Is my file uploaded?</h4>
+    <p>No. Loading, changing the volume and exporting all happen inside your browser. Only the MP3 encoder component (lamejs) is loaded from cdnjs when the page opens; your audio data is never sent there.</p>
+    <h4>Does saving reduce the quality?</h4>
+    <p>WAV is not compressed, so nothing is lost apart from the volume change and trimming (it is written as 16-bit). MP3 is re-compressed, so the sound changes slightly. If unsure, choose 192 kbps or higher; for the best quality choose 320 kbps or WAV. WAV files are larger: about 350 MB for 35 minutes of 44.1 kHz stereo.</p>
+    <h4>Why can’t my file be loaded?</h4>
+    <p>Supported files are MP3, WAV, M4A and MP4 up to 35 minutes. Files with copy protection (DRM), videos without audio and damaged files cannot be loaded. A very large file may also fail if your device runs out of memory; try splitting it into shorter parts.</p>
+    <h4>I hear no sound when I play.</h4>
+    <p>On an iPhone, the browser may be silent while the silent-mode switch is on. Turn silent mode off, and check that your device volume is up and that this tool’s volume is not set to 0%.</p>
+    <h4>Can I process someone else’s music or videos?</h4>
+    <p>Only use audio that you own, that you have the rights holder’s permission to use, or that the law allows you to use. For details, see <a href="/en/legal/">Credits, Terms of Use, Privacy &amp; Copyright Notice</a>.</p>
+  </section>
+  <footer class="site-foot">
+    <nav><a href="/en/">Home</a><a href="/en/legal/">Terms &amp; Privacy</a></nav>
+    <p class="contact">Contact: <a href="mailto:gptbotboy&#64;gmail.com">gptbotboy&#64;gmail.com</a></p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<script src="/assets/i18n/volume.en.js?v=20261009"></script>
+<script src="/assets/volume.js?v=20261009"></script>
+</body>
+</html>

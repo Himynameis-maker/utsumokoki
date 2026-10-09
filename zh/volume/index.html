@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>在线视频转音频・音量调节工具 – 无需上传（MP4转MP3）</title>
+<meta name="description" content="调高或调低 MP4、MP3、WAV、M4A 的音量，可从视频中提取音频并保存为 MP3 或 WAV。文件不会上传，全程在浏览器内处理。可对照波形裁剪开头和结尾，免费使用。">
+<link rel="canonical" href="https://volchange-local.com/zh/volume/">
+<link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/">
+<link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/">
+<link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/">
+<link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="音频工具">
+<meta property="og:title" content="在线视频转音频・音量调节工具 – 无需上传（MP4转MP3）">
+<meta property="og:description" content="调高或调低 MP4、MP3、WAV、M4A 的音量，可从视频中提取音频并保存为 MP3 或 WAV。文件不会上传，全程在浏览器内处理。可对照波形裁剪开头和结尾，免费使用。">
+<meta property="og:url" content="https://volchange-local.com/zh/volume/">
+<meta property="og:locale" content="zh_CN">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/assets/common.css?v=20261009">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610225668788576"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+<main>
+  <header class="site-head">
+    <div class="top"><a class="brand" href="/zh/">音频工具</a><nav class="langs" aria-label="语言"><a href="/ja/volume/" hreflang="ja" lang="ja">日本語</a><a href="/en/volume/" hreflang="en" lang="en">English</a><span aria-current="true" lang="zh-CN">中文（简体）</span></nav></div>
+    <nav class="tabs" aria-label="工具"><a href="/zh/">首页</a><a href="/zh/volume/" aria-current="page">音量调节</a></nav>
+  </header>
+  <h1 data-i18n="title">音量调节工具</h1>
+  <p class="lead" data-i18n="lead">导入 MP3、WAV、M4A 或 MP4 文件（视频仅使用音频；最长 35 分钟），调整音量，并在查看波形的同时裁剪开头和结尾。可保存为 MP3 或 WAV。文件仅在本设备的浏览器中处理，不会上传到任何服务器。如果没有声音，请试着关闭静音模式。</p>
+
+  <label class="drop" id="drop" for="file">
+    <input type="file" id="file" accept=".mp3,.wav,.m4a,.mp4,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a,video/mp4">
+    <strong id="dropTitle">选择音频文件</strong>
+    <span data-i18n="dropSub">点按选择，或拖放到此处（最长 35 分钟）</span>
+  </label>
+  <p class="err" id="err" role="alert" hidden></p>
+
+  <div id="app" hidden>
+    <section class="panel" style="margin-top:14px">
+      <div class="fname" id="fname"></div>
+      <div class="meta" id="fmeta"></div>
+    </section>
+
+    <section class="panel">
+      <canvas id="wave" data-i18n-aria="waveAria"></canvas>
+      <div class="time"><span id="tStart">0:00.0</span><span id="tMid">0:00.0 / 0:00.0</span><span id="tEnd">0:00.0</span></div>
+      <p class="meta" style="margin:6px 0 12px" data-i18n="hint">拖动波形两端的圆点来选择要保留的范围。点按波形或拖动白色播放位置条可移动播放位置。</p>
+      <div class="player">
+        <button class="btn" id="play">播放</button>
+        <button class="btn ghost" id="reset" data-i18n="reset">恢复全部范围</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="vol-row">
+        <div class="vol-num"><span id="volNum">100</span><small>%</small></div>
+        <div class="meta" id="dbNum">0.0 dB</div>
+      </div>
+      <input type="range" id="vol" min="0" max="398" step="1" value="100" data-i18n-aria="volAria">
+      <div class="ticks"><span style="left:0">0%</span><span style="left:25.13%">100%</span><span style="left:50.25%">200%</span><span style="left:75.38%">300%</span><span style="left:100%">+12 dB</span></div>
+      <div class="presets">
+        <button class="chip" data-v="50">50%</button>
+        <button class="chip" data-v="100">100%</button>
+        <button class="chip" data-v="200">200%</button>
+        <button class="chip" data-v="300">300%</button>
+        <button class="chip" data-v="398">+12 dB</button>
+      </div>
+      <p class="warn" id="warn"></p>
+    </section>
+
+    <section class="panel">
+      <div class="opts">
+        <label><span data-i18n="fmtLabel">保存格式</span>
+          <select id="fmt"><option value="mp3">MP3</option><option value="wav" data-i18n="optWav">WAV（无损）</option></select>
+        </label>
+        <label id="brWrap"><span data-i18n="brLabel">MP3 比特率 (kbps)</span>
+          <select id="br"><option>128</option><option selected>192</option><option>256</option><option>320</option></select>
+        </label>
+      </div>
+      <button class="btn" id="dl" data-i18n="dl">应用音量并保存</button>
+      <progress id="prog" max="100" value="0" hidden></progress>
+      <p class="status" id="status" role="status"></p>
+      <div class="share" id="shareBox" hidden><span data-i18n="shareHint">无法保存？请点这里</span><button type="button" class="share-btn" id="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span data-i18n="share">分享</span></button></div>
+    </section>
+  </div>
+
+  <p class="note" data-i18n="note">不会上传到服务器。请仅处理你有权使用的音频。</p>
+  <section class="panel guide" id="guide">
+    <h2>关于本工具</h2>
+    <p>“音量调节工具”是一款免费的在线工具，可以直接在浏览器中调高或调低 MP3、WAV、M4A、MP4 文件的音量。你还可以从视频（MP4）中提取音频并保存，也可以一边查看波形，一边裁剪开头和结尾不需要的部分。文件不会被发送到服务器，所有处理都在你自己的电脑或手机上完成。</p>
+
+    <h3>使用方法</h3>
+    <ol>
+      <li>点按“选择音频文件”（或将文件拖放到此处），导入最长 35 分钟的 MP3、WAV、M4A 或 MP4 文件。</li>
+      <li>拖动波形两端的圆点，选择要保留的范围。如果要使用全部内容，保持原样即可。点按“播放”可以确认效果。</li>
+      <li>用滑块，或 50%、100%、200%、300%、+12 dB 按钮来设定音量。播放过程中也可以调整，随时听听效果。</li>
+      <li>选择保存格式（MP3 或 WAV）。选择 MP3 时还可以设定比特率。</li>
+      <li>点按“应用音量并保存”，转换后的文件会下载到你的设备。文件名会带上所设的音量百分比，例如“原文件名_vol150.mp3”。</li>
+    </ol>
+
+    <h3>主要功能</h3>
+    <ul>
+      <li>音量可在 0%（静音）到 398%（+12 dB）之间调整，100% 为原始音量。</li>
+      <li>可从 MP4 视频中只提取音频，并保存为 MP3 或 WAV。</li>
+      <li>可对照波形裁剪开头和结尾不需要的部分。</li>
+      <li>保存格式为 MP3（128、192、256、320 kbps）或 WAV（无压缩）。</li>
+      <li>所有处理都在浏览器内完成，无需注册，也无需安装应用。</li>
+    </ul>
+
+    <h3>音量调节的参考</h3>
+    <p>音量同时以“%”和“dB（分贝）”显示。50% 约为 −6 dB，200% 约为 +6 dB，300% 约为 +9.5 dB，398% 为 +12 dB。录得较小的音频，调到 200%–300% 通常会听得更清楚。不过，如果原始音频本身已经很大，调得过高会使波形的峰值被削平，导致声音失真（削波）。当部分内容可能出现削波时，页面会显示提示，建议先从较小的数值开始，播放确认后再调整。</p>
+
+    <h3>常见问题</h3>
+    <h4>放入视频文件后，画面还会保留吗？</h4>
+    <p>不会。本工具只从 MP4 中提取音频，并保存为 MP3 或 WAV 音频文件。不支持视频的编辑或导出。没有音轨的视频无法导入。</p>
+    <h4>文件会被上传吗？</h4>
+    <p>不会。导入、调整音量和导出都在你的浏览器内完成。只有 MP3 转换所用的组件（lamejs）会在打开页面时从 cdnjs 加载，你的音频数据不会被发送到那里。</p>
+    <h4>保存后音质会下降吗？</h4>
+    <p>WAV 不经过压缩，除音量调整和裁剪外不会有损失（以 16 位导出）。MP3 会重新压缩，因此音质会略有变化。拿不准时请选择 192 kbps 或更高；追求音质请选择 320 kbps 或 WAV。WAV 文件较大，44.1 kHz 立体声 35 分钟约为 350 MB。</p>
+    <h4>有的文件无法导入。</h4>
+    <p>支持 35 分钟以内的 MP3、WAV、M4A 和 MP4。带有版权保护（DRM）的文件、没有音频的视频以及已损坏的文件无法导入。文件过大时，也可能因设备内存不足而失败，请尝试分成较短的部分。</p>
+    <h4>播放时没有声音。</h4>
+    <p>在 iPhone 上，如果开启了静音开关，浏览器可能不会发出声音。请关闭静音模式，并确认设备音量已调高，且本工具的音量没有设为 0%。</p>
+    <h4>可以加工别人的音乐或视频吗？</h4>
+    <p>请仅处理你本人拥有权利的音频、已获权利人许可使用的音频，或法律允许使用的音频。详情请参阅<a href="/zh/legal/">“出处、使用条款、隐私及著作权须知”</a>。</p>
+  </section>
+  <footer class="site-foot">
+    <nav><a href="/zh/">首页</a><a href="/zh/legal/">使用条款与隐私</a></nav>
+    <p class="contact">联系方式: <a href="mailto:gptbotboy&#64;gmail.com">gptbotboy&#64;gmail.com</a></p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<script src="/assets/i18n/volume.zh.js?v=20261009"></script>
+<script src="/assets/volume.js?v=20261009"></script>
+</body>
+</html>

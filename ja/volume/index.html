@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>動画を音声に変換 アップロードなし 音量調整ツール</title>
+<meta name="description" content="MP4・MP3・WAV・M4Aの音量を上げる・下げる。動画から音声だけを取り出してMP3/WAVで保存できます。ファイルはアップロードされず、ブラウザ内だけで処理。波形を見ながら前後のカットも可能。無料。">
+<link rel="canonical" href="https://volchange-local.com/ja/volume/">
+<link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/">
+<link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/">
+<link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/">
+<link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="音声ツール">
+<meta property="og:title" content="動画を音声に変換 アップロードなし 音量調整ツール">
+<meta property="og:description" content="MP4・MP3・WAV・M4Aの音量を上げる・下げる。動画から音声だけを取り出してMP3/WAVで保存できます。ファイルはアップロードされず、ブラウザ内だけで処理。波形を見ながら前後のカットも可能。無料。">
+<meta property="og:url" content="https://volchange-local.com/ja/volume/">
+<meta property="og:locale" content="ja_JP">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/assets/common.css?v=20261009">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6610225668788576"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+<main>
+  <header class="site-head">
+    <div class="top"><a class="brand" href="/ja/">音声ツール</a><nav class="langs" aria-label="言語"><span aria-current="true" lang="ja">日本語</span><a href="/en/volume/" hreflang="en" lang="en">English</a><a href="/zh/volume/" hreflang="zh-CN" lang="zh-CN">中文（简体）</a></nav></div>
+    <nav class="tabs" aria-label="ツール"><a href="/ja/">ホーム</a><a href="/ja/volume/" aria-current="page">音量調整</a></nav>
+  </header>
+  <h1 data-i18n="title">音量調整ツール</h1>
+  <p class="lead" data-i18n="lead">MP3・WAV・M4A・MP4（動画は音声のみ使用・35分まで）を読み込んで、音量調整と、波形を見ながらの前後カットができます。保存形式はMP3またはWAVです。ファイルはこの端末のブラウザ内だけで処理され、外部へ送信されません。無音になっている場合はマナーモードを切ってみてください。</p>
+
+  <label class="drop" id="drop" for="file">
+    <input type="file" id="file" accept=".mp3,.wav,.m4a,.mp4,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a,video/mp4">
+    <strong id="dropTitle">音声ファイルを選択</strong>
+    <span data-i18n="dropSub">タップして選ぶ、またはここにドラッグ＆ドロップ（35分まで）</span>
+  </label>
+  <p class="err" id="err" role="alert" hidden></p>
+
+  <div id="app" hidden>
+    <section class="panel" style="margin-top:14px">
+      <div class="fname" id="fname"></div>
+      <div class="meta" id="fmeta"></div>
+    </section>
+
+    <section class="panel">
+      <canvas id="wave" data-i18n-aria="waveAria"></canvas>
+      <div class="time"><span id="tStart">0:00.0</span><span id="tMid">0:00.0 / 0:00.0</span><span id="tEnd">0:00.0</span></div>
+      <p class="meta" style="margin:6px 0 12px" data-i18n="hint">波形の左右の丸をドラッグして、残す範囲を選びます。波形をタップするか白い再生位置バーをドラッグすると、再生位置が移動します。</p>
+      <div class="player">
+        <button class="btn" id="play">再生</button>
+        <button class="btn ghost" id="reset" data-i18n="reset">全体に戻す</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="vol-row">
+        <div class="vol-num"><span id="volNum">100</span><small>%</small></div>
+        <div class="meta" id="dbNum">0.0 dB</div>
+      </div>
+      <input type="range" id="vol" min="0" max="398" step="1" value="100" data-i18n-aria="volAria">
+      <div class="ticks"><span style="left:0">0%</span><span style="left:25.13%">100%</span><span style="left:50.25%">200%</span><span style="left:75.38%">300%</span><span style="left:100%">+12 dB</span></div>
+      <div class="presets">
+        <button class="chip" data-v="50">50%</button>
+        <button class="chip" data-v="100">100%</button>
+        <button class="chip" data-v="200">200%</button>
+        <button class="chip" data-v="300">300%</button>
+        <button class="chip" data-v="398">+12 dB</button>
+      </div>
+      <p class="warn" id="warn"></p>
+    </section>
+
+    <section class="panel">
+      <div class="opts">
+        <label><span data-i18n="fmtLabel">保存形式</span>
+          <select id="fmt"><option value="mp3">MP3</option><option value="wav" data-i18n="optWav">WAV（無劣化）</option></select>
+        </label>
+        <label id="brWrap"><span data-i18n="brLabel">MP3ビットレート（kbps）</span>
+          <select id="br"><option>128</option><option selected>192</option><option>256</option><option>320</option></select>
+        </label>
+      </div>
+      <button class="btn" id="dl" data-i18n="dl">音量を調整して保存</button>
+      <progress id="prog" max="100" value="0" hidden></progress>
+      <p class="status" id="status" role="status"></p>
+      <div class="share" id="shareBox" hidden><span data-i18n="shareHint">保存できない場合はこちら</span><button type="button" class="share-btn" id="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span data-i18n="share">共有</span></button></div>
+    </section>
+  </div>
+
+  <p class="note" data-i18n="note">サーバーへのアップロードは行いません。ご自身が利用権を持つ音声のみ加工してください。</p>
+  <section class="panel guide" id="guide">
+    <h2>このツールについて</h2>
+    <p>「音量調整ツール」は、MP3・WAV・M4A・MP4ファイルの音量を、ブラウザの上だけで上げたり下げたりできる無料のツールです。動画（MP4）から音声だけを取り出して保存したり、波形を見ながら前後の不要な部分をカットしたりすることもできます。ファイルはサーバーに送信されず、お使いのパソコンやスマートフォンの中だけで処理されます。</p>
+
+    <h3>使い方</h3>
+    <ol>
+      <li>「音声ファイルを選択」をタップ（またはファイルをドラッグ＆ドロップ）して、35分までのMP3・WAV・M4A・MP4を読み込みます。</li>
+      <li>波形の左右の丸をドラッグして、残したい範囲を選びます。全体を使う場合は、そのままで構いません。「再生」で仕上がりを確認できます。</li>
+      <li>スライダー、または50%・100%・200%・300%・+12 dBのボタンで音量を決めます。再生中に動かして、聞こえ方を確かめられます。</li>
+      <li>保存形式（MP3またはWAV）を選びます。MP3ではビットレートも選べます。</li>
+      <li>「音量を調整して保存」を押すと、変換したファイルが端末にダウンロードされます。ファイル名は「元のファイル名_vol150.mp3」のように、設定した音量（%）が付きます。</li>
+    </ol>
+
+    <h3>主な機能</h3>
+    <ul>
+      <li>音量を0%（無音）〜398%（+12 dB）の範囲で調整できます。100%が元の音量です。</li>
+      <li>MP4動画から音声だけを取り出し、MP3またはWAVで保存できます。</li>
+      <li>波形を見ながら、前後の不要な部分をカットできます。</li>
+      <li>保存形式はMP3（128・192・256・320 kbps）またはWAV（無圧縮）です。</li>
+      <li>処理はすべてブラウザ内で完結します。会員登録やアプリのインストールは不要です。</li>
+    </ul>
+
+    <h3>音量調整の目安</h3>
+    <p>音量は「%」と「dB（デシベル）」の両方で表示されます。50%は約−6 dB、200%は約+6 dB、300%は約+9.5 dB、398%が+12 dBです。小さく録音された音声は、200〜300%にすると聞き取りやすくなることが多くあります。ただし、元の音声がすでに大きい場合に上げすぎると、波形の山が上限で頭打ちになり、音が割れます（クリッピング）。音割れしそうな部分があるときは画面に注意が表示されるので、まず小さめの値から試し、再生して確認してください。</p>
+
+    <h3>よくある質問</h3>
+    <h4>動画ファイルを入れても、映像は残りますか？</h4>
+    <p>残りません。MP4から音声だけを取り出し、MP3またはWAVの音声ファイルとして保存します。映像の編集や書き出しはできません。音声トラックのない動画は読み込めません。</p>
+    <h4>ファイルはアップロードされますか？</h4>
+    <p>されません。読み込み・音量の変更・書き出しは、すべてお使いのブラウザ内で行います。MP3変換用の部品（lamejs）だけはページを開いたときにcdnjsから読み込まれますが、あなたの音声データがそこへ送られることはありません。</p>
+    <h4>保存すると音質は落ちますか？</h4>
+    <p>WAVは圧縮しないため、音量の変更とカット以外の劣化はありません（16bitで書き出します）。MP3は再圧縮されるため、わずかに音質が変わります。迷ったら192 kbps以上、音質を優先するなら320 kbpsかWAVを選んでください。ファイルサイズはWAVのほうが大きく、44.1 kHzのステレオで35分なら約350 MBになります。</p>
+    <h4>読み込めないファイルがあります。</h4>
+    <p>対応しているのは、35分以内のMP3・WAV・M4A・MP4です。著作権保護（DRM）がかかったファイル、音声のない動画、壊れたファイルは読み込めません。ファイルが大きすぎて端末のメモリが足りず、失敗することもあります。その場合は、短く分けてお試しください。</p>
+    <h4>再生しても音が出ません。</h4>
+    <p>iPhoneでは、本体のマナーモード（消音スイッチ）がオンだとブラウザの音が出ないことがあります。マナーモードを切り、端末の音量と、このツールの音量が0%になっていないかを確認してください。</p>
+    <h4>他人の音楽や動画を加工してもいいですか？</h4>
+    <p>ご自身が権利を持つ音声、権利者の許諾を得た音声、または法令で認められた範囲の音声に限ってご利用ください。詳しくは、<a href="/ja/legal/">「出典・利用規約・プライバシー・著作物に関する注意」</a>をご覧ください。</p>
+  </section>
+  <footer class="site-foot">
+    <nav><a href="/ja/">ホーム</a><a href="/ja/legal/">利用規約・プライバシー</a></nav>
+    <p class="contact">お問い合わせ: <a href="mailto:gptbotboy&#64;gmail.com">gptbotboy&#64;gmail.com</a></p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<script src="/assets/i18n/volume.ja.js?v=20261009"></script>
+<script src="/assets/volume.js?v=20261009"></script>
+</body>
+</html>

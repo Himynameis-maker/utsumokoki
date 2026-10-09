@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://volchange-local.com/</loc><lastmod>2026-10-09</lastmod></url>
+  <url>
+    <loc>https://volchange-local.com/ja/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/en/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/zh/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/ja/volume/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/en/volume/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/zh/volume/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/volume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/volume/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/volume/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/volume/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/ja/legal/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/legal/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/en/legal/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/legal/"/>
+  </url>
+  <url>
+    <loc>https://volchange-local.com/zh/legal/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://volchange-local.com/ja/legal/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://volchange-local.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://volchange-local.com/zh/legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://volchange-local.com/ja/legal/"/>
+  </url>
+</urlset>
